@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Volopay Onboarding Tracker</title>
+<style>
+:root{box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);
+--bg:#f6f7fb;--card:#fff;--tx:#161a2b;--mu:#667085;--bd:#e4e7ef;--pri:#4b3fe0;
+--you:#b54708;--youb:#fff4e0;--vol:#1849a9;--volb:#e8f0ff;--ok:#067647;--okb:#e6f6ee;--bad:#b42318;--badb:#fdeceb}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0f1220;--card:#181c2e;--tx:#eceefa;--mu:#9aa1bd;--bd:#2a3050;--pri:#8f86ff;--you:#fdb022;--youb:#3a2a0c;--vol:#84adff;--volb:#14264d;--ok:#47cd89;--okb:#0f2d20;--bad:#f97066;--badb:#3b1512}}
+:root[data-theme="dark"]{--bg:#0f1220;--card:#181c2e;--tx:#eceefa;--mu:#9aa1bd;--bd:#2a3050;--pri:#8f86ff;--you:#fdb022;--youb:#3a2a0c;--vol:#84adff;--volb:#14264d;--ok:#47cd89;--okb:#0f2d20;--bad:#f97066;--badb:#3b1512}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--tx);font:15px/1.5 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+.wrap{max-width:880px;margin:0 auto;padding:16px}
+.demo{background:var(--card);border:1px dashed var(--bd);border-radius:12px;padding:10px 12px;display:flex;gap:10px;flex-wrap:wrap;align-items:center;font-size:13px;color:var(--mu)}
+select,button{font:inherit}select{background:var(--bg);color:var(--tx);border:1px solid var(--bd);border-radius:8px;padding:5px 8px}
+.tabs{display:flex;gap:6px;margin:14px 0}.tab{border:1px solid var(--bd);background:var(--card);color:var(--tx);padding:7px 14px;border-radius:99px;cursor:pointer}.tab.on{background:var(--pri);color:#fff;border-color:var(--pri)}
+.head{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;align-items:flex-end;margin-bottom:12px}
+h1{font-size:22px;margin:0}h2{font-size:16px;margin:0 0 8px}.mu{color:var(--mu);font-size:13px}
+.card{background:var(--card);border:1px solid var(--bd);border-radius:14px;padding:16px;margin-bottom:12px}
+.banner{border-radius:14px;padding:16px;margin-bottom:12px;border:1px solid}
+.banner h2{font-size:20px;margin:4px 0}.pill{display:inline-block;font-size:12px;font-weight:600;padding:2px 10px;border-radius:99px}
+.b-you{background:var(--youb);border-color:var(--you);color:var(--tx)}.b-you .pill{background:var(--you);color:#fff}
+.b-vol{background:var(--volb);border-color:var(--vol)}.b-vol .pill{background:var(--vol);color:#fff}
+.b-ok{background:var(--okb);border-color:var(--ok)}.b-ok .pill{background:var(--ok);color:#fff}
+.b-bad{background:var(--badb);border-color:var(--bad)}.b-bad .pill{background:var(--bad);color:#fff}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:12px}@media(max-width:640px){.two{grid-template-columns:1fr}}
+.col h2{display:flex;align-items:center;gap:8px}.dot{width:10px;height:10px;border-radius:50%}
+.row{display:flex;justify-content:space-between;align-items:center;gap:8px;padding:8px 0;border-top:1px solid var(--bd)}.row:first-of-type{border-top:0}
+.btn{background:var(--pri);color:#fff;border:0;border-radius:9px;padding:7px 13px;cursor:pointer;font-weight:600}.btn:disabled{opacity:.4;cursor:not-allowed}
+.btn.g{background:transparent;color:var(--pri);border:1px solid var(--pri)}
+.chip{font-size:12px;padding:1px 8px;border-radius:99px;border:1px solid var(--bd);color:var(--mu);white-space:nowrap}
+.chip.ok{color:var(--ok);border-color:var(--ok)}.chip.bad{color:var(--bad);border-color:var(--bad)}.chip.you{color:var(--you);border-color:var(--you)}.chip.vol{color:var(--vol);border-color:var(--vol)}
+.grp{font-size:11px;letter-spacing:.08em;color:var(--mu);margin:10px 0 4px;font-weight:700}
+.st{display:flex;gap:12px;padding:8px 0}.num{flex:none;width:28px;height:28px;border-radius:50%;display:grid;place-items:center;font-size:13px;font-weight:700;border:2px solid var(--bd);color:var(--mu)}
+.st.done .num{background:var(--ok);border-color:var(--ok);color:#fff}.st.cur .num{border-color:var(--pri);color:var(--pri)}
+.st.cur.you .num{border-color:var(--you);color:var(--you)}.st.cur.bad .num{border-color:var(--bad);color:var(--bad)}.st.skip{opacity:.5}
+.st b{display:block}.log{font-size:13px;border-left:2px solid var(--bd);padding-left:10px;margin:6px 0}
+ul.f{padding-left:18px;margin:6px 0}ul.f li{margin:4px 0}
+.note{font-size:13px;color:var(--mu);margin-top:6px}
+</style></head><body><div class="wrap">
+
+<div class="demo"><b style="color:var(--tx)">Prototype controls</b>
+<label>Simulate state <select id="sc"></select></label>
+<label>Region <select id="rg"><option value="SG">Singapore</option><option value="IN">India</option></select></label>
+<span>Mock data only</span></div>
+
+<div class="tabs"><button class="tab on" data-t="c">Client view (one link)</button><button class="tab" data-t="n">Flow, edge cases, improvement</button></div>
+
+<div id="c"></div>
+
+<div id="n" hidden>
+<div class="card"><h2>The flow (6 steps)</h2><ul class="f">
+<li><b>Sales, HubSpot:</b> AE marks the deal as plan agreed. Super Admin creates the client record and the tracker link is sent with the form link.</li>
+<li><b>Client, Volopay form (one per region):</b> the admin fills KYB details and uploads documents. Saved in Super Admin, with a copy in HubSpot. Tracker: <i>waiting on you</i> until every item is in.</li>
+<li><b>Ops, Super Admin (MDC):</b> sanity check: documents attached, clear, match the form, match the product. CSM is assigned. Tracker flips to <i>waiting on Volopay</i> and shows the CSM.</li>
+<li><b>Partner review (Pine Labs/LQ in IN, NIUM/Airwallex in SG):</b> details go by API, automation or email. Result: Approved, RFI or Rejected. The tracker shows the partner and days elapsed.</li>
+<li><b>If RFI, ADC:</b> Ops moves the client to ADC. The tracker lists exactly what is needed, the client uploads it there, and it goes back to the partner. No email thread.</li>
+<li><b>Client created, then User KYC:</b> Super Admin creates the client and invites admins. Each card user completes KYC in the app, and the tracker shows per-user status. No KYC, no card payment. Then live.</li></ul></div>
+<div class="card"><h2>Edge cases</h2><ul class="f">
+<li><b>1. Partner raises an RFI.</b> Stage 6 (ADC) reopens and the banner turns to <i>waiting on you</i> with the specific documents. After upload, the status returns to <i>partner review</i> and the CSM is notified. Framed as the next step, never as bad news.</li>
+<li><b>2. One user’s KYC is rejected</b> (for example a cropped passport) after the business is approved. The company stays approved and other users carry on. Only that user is blocked from card payments, and the tracker says what is missing. The client can re-upload in place.</li>
+<li>Also simulated: <i>taking longer</i> (Volopay is stuck: says so, shows owner, days and an ETA, and offers a nudge) and <i>business rejected</i> (reason shown, CSM walks through next steps).</li></ul></div>
+<div class="card"><h2>One thing I would improve in Volopay</h2>
+<p style="margin:0">Onboarding lives in two systems: HubSpot for stages 1 to 3 and Super Admin for 4 to 8. No single field says <b>who the ball is with</b>, so the client emails to ask. I would add one shared “waiting on” owner and a days-in-stage timer in Super Admin, shown to the client. An overdue timer would also alert the CSM <i>before</i> the client has to ask.</p></div>
+</div>
+
+</div>
+<script>
+const PART={SG:'NIUM / Airwallex',IN:'Pine Labs / LQ'};
+const STG=[['Demo booked','Sales'],['Demo done','Sales'],['Plan agreed','Sales'],['Basic documents (MDC)','Onboarding'],['Partner review','Onboarding'],['More documents (ADC)','Onboarding'],['Client created','Onboarding'],['User KYC','Onboarding']];
+const SUB={4:'Fill the Volopay form and upload documents. Ops then checks them.',5:'The banking partner verifies your business.',6:'Only needed if the partner asks for more. Most clients skip this.',7:'Your company is created on Volopay and admins are invited.',8:'Every card user verifies once. Then you are live.'};
+const SCN={you:'Waiting on you: documents',vol:'Waiting on Volopay: partner review',rfi:'Edge case 1: partner asked for more (RFI)',late:'Volopay is taking longer',rej:'Business rejected',kyc:'Edge case 2: one user’s KYC rejected',live:'Live'};
+const $=id=>document.getElementById(id);let st,log;
+const DOCS=()=>[['Business registration certificate',1],['Director ID (passport)',0],['Proof of business address',0],['Latest company profile / ACRA or MCA extract',0]];
+const now=()=>new Date().toLocaleTimeString([], {hour:'2-digit',minute:'2-digit'});
+function load(k){const R=$('rg').value;log=[{w:'Volopay',t:'Tracker link created. Welcome, Priya.'}];
+ st={k,hadRfi:false,stage:4,state:'you',days:2,docs:DOCS(),users:[]};
+ if(k=='vol'){st.stage=5;st.state='vol';st.days=2;st.docs=[];log.push({w:'You',t:'Submitted KYB form and documents.'},{w:'Volopay Ops',t:'Sanity check passed. Sent to partner.'})}
+ if(k=='late'){st.stage=5;st.state='late';st.days=R=='IN'?7:5;st.docs=[];log.push({w:'Volopay Ops',t:'Sent to partner.'},{w:'Volopay',t:'Partner has not replied. CSM Arjun is chasing.'})}
+ if(k=='rfi'){st.stage=6;st.state='rfi';st.hadRfi=true;st.docs=[['Certified copy of director’s address proof',0],['Latest 3 months bank statement',0]];log.push({w:'Partner',t:'Asked for more information (RFI).'})}
+ if(k=='rej'){st.stage=5;st.state='rej';st.docs=[];log.push({w:'Partner',t:'Could not approve the application.'})}
+ if(k=='kyc'||k=='live'){st.stage=8;st.state='kyc';st.docs=[];log.push({w:'Volopay',t:'Client created. Admin invited. Early access on.'});
+  st.users=[{n:'Priya Nair (admin)',s:'done'},{n:'Rahul Mehta',s:k=='live'?'done':'rej',why:'Passport scan is cropped. All four edges must be visible.'},{n:'Sana Iqbal',s:k=='live'?'done':'pend'}];
+  if(k=='live')st.state='live'}
+ draw()}
+function ball(){const s=st.state,p=PART[$('rg').value];
+ if(s=='you')return['you','Waiting on you','Please upload '+st.docs.filter(d=>!d[1]).length+' more item(s)','Your Volopay Ops check starts as soon as you submit. Nothing else is pending from you.'];
+ if(s=='rfi')return['you','Waiting on you','The partner needs a little more','This is a normal step. Upload the items below and we send them straight back to the partner.'];
+ if(s=='vol')return['vol','Waiting on Volopay','Partner review in progress','Nothing needed from you. '+p+' is verifying your business. Day '+st.days+'. You can use early access meanwhile.'];
+ if(s=='late')return['vol','Waiting on Volopay','This is taking longer than usual','Not your fault, and nothing is needed from you. Day '+st.days+' (we expected '+($('rg').value=='IN'?5:3)+'). Your CSM Arjun is chasing '+p+' and will update you by tomorrow 5 PM.'];
+ if(s=='rej')return['bad','Not approved','The partner could not approve this application','Reason (mock): registered address on the certificate differs from the form. Your CSM Arjun will walk you through next steps and can help you re-apply.'];
+ if(s=='kyc'){const o=st.users.filter(u=>u.s!='done').length;return[st.users.some(u=>u.s=='rej')?'you':'vol','Your business is approved','User KYC: '+o+' of '+st.users.length+' users still to finish','No KYC, no card payment. Each user finishes it in the app. Others can carry on while one is pending.']}
+ return['ok','You are live','Everyone is verified','All users have completed KYC. You can pay by card.']}
+function draw(){const [c,pill,h,sub]=ball();const R=$('rg').value,s=st.state;
+ const skip6=!st.hadRfi&&st.stage>5&&st.stage!=6;
+ let H=`<div class="head"><div><h1>Acme Pte Ltd</h1><div class="mu">${R=='IN'?'India':'Singapore'} · CSM Arjun Rao · arjun@volopay.com</div></div><span class="chip">Day ${st.days} of onboarding</span></div>
+ <div class="banner b-${c}"><span class="pill">${pill}</span><h2>${h}</h2><div>${sub}</div>
+ ${(s=='late')?'<button class="btn g" style="margin-top:10px" onclick="nudge()">Nudge my CSM</button>':''}
+ ${(s=='rej')?'<button class="btn" style="margin-top:10px" onclick="nudge(1)">Book a call with my CSM</button>':''}</div>`;
+ // two columns
+ const you=[],vol=[];
+ if(st.docs.length){st.docs.forEach((d,i)=>you.push(`<div class="row"><span>${d[0]}</span>${d[1]?'<span class="chip ok">Attached</span>':`<button class="btn g" onclick="up(${i})">Upload</button>`}</div>`))}
+ if(st.users.length){st.users.forEach((u,i)=>{if(u.s=='done')return;you.push(`<div class="row"><span>${u.n}<div class="mu">${u.s=='rej'?'Rejected: '+u.why:'Invite sent, KYC not started'}</div></span>${u.s=='rej'?`<button class="btn g" onclick="fix(${i})">Re-upload</button>`:`<button class="btn g" onclick="rem(${i})">Remind</button>`}</div>`)})}
+ if(!you.length)you.push('<div class="mu">Nothing is pending from you right now.</div>');
+ const p=PART[R];
+ if(s=='you'||s=='rfi'){vol.push(`<div class="row"><span>${s=='rfi'?'Review your extra documents, then send to the partner':'Ops check of your documents'}<div class="mu">Starts after you submit · Volopay Ops</div></span><span class="chip">Not started</span></div>`)}
+ if(s=='vol'||s=='late')vol.push(`<div class="row"><span>Partner review by ${p}<div class="mu">Owner: Arjun (CSM) · ${s=='late'?'Overdue, chasing':'Expected within '+(R=='IN'?5:3)+' business days'}</div></span><span class="chip ${s=='late'?'bad':'vol'}">${s=='late'?'Overdue':'In progress'}</span></div>`);
+ if(s=='rej')vol.push('<div class="row"><span>CSM walkthrough of next steps<div class="mu">Owner: Arjun (CSM)</div></span><span class="chip vol">Scheduled</span></div>');
+ if(s=='kyc')vol.push(`<div class="row"><span>Client created, early access on</span><span class="chip ok">Done</span></div>`+(st.users.some(u=>u.s=='rej')?'<div class="row"><span>Review re-uploaded KYC<div class="mu">Partner check, usually quick</div></span><span class="chip">Waiting for you first</span></div>':''));
+ if(s=='live')vol.push('<div class="row"><span>Nothing pending</span><span class="chip ok">All done</span></div>');
+ H+=`<div class="two"><div class="card col"><h2><span class="dot" style="background:var(--you)"></span>Pending from you</h2>${you.join('')}
+ ${(s=='you'||s=='rfi')?`<button class="btn" style="margin-top:10px" ${st.docs.every(d=>d[1])?'':'disabled'} onclick="sub()">Submit to Volopay</button>`:''}</div>
+ <div class="card col"><h2><span class="dot" style="background:var(--vol)"></span>Pending from Volopay</h2>${vol.join('')}</div></div>`;
+ // stages
+ H+='<div class="card"><h2>Your journey</h2>';let g='';
+ STG.forEach((x,i)=>{const n=i+1;if(x[1]!=g){g=x[1];H+=`<div class="grp">${g.toUpperCase()}${g=='Sales'?' · done in HubSpot':' · tracked in Super Admin'}</div>`}
+  let cl=n<st.stage?'done':n==st.stage?'cur':'',own='',sk=false;
+  if(n==6&&!st.hadRfi&&st.stage!=6){sk=true;cl=st.stage>6?'skip':''}
+  if(n==st.stage&&s!='live'){cl+=' '+(c=='you'?'you':c=='bad'?'bad':'')}
+  if(s=='live')cl='done';
+  const o=n<=3?'Volopay Sales':n==4?(s=='you'?'You, then Volopay Ops':'Volopay Ops'):n==5?'Banking partner':n==6?'You':n==7?'Volopay':'Each card user';
+  H+=`<div class="st ${cl}"><div class="num">${(cl.includes('done'))?'✓':n}</div><div><b>${x[0]} ${n==st.stage&&s!='live'?`<span class="chip ${c=='you'?'you':c=='bad'?'bad':'vol'}">${c=='you'?'Your turn':c=='bad'?'Needs attention':'Our turn'}</span>`:''}</b><span class="mu">${sk&&st.stage<6?'Skipped unless the partner asks · ':''}${SUB[n]||'Done'} · ${o}</span></div></div>`});
+ H+='</div>';
+ H+=`<div class="card"><h2>Activity</h2>${log.slice().reverse().map(l=>`<div class="log"><b>${l.w}</b> · ${l.t}</div>`).join('')}<div class="note">Status updates automatically when anyone acts. No emails needed. Questions? ${R=='IN'?'India onboarding includes extra manual compliance checks, so it can take a little longer.':'Your CSM is your one point of contact.'}</div></div>`;
+ $('c').innerHTML=H}
+function up(i){st.docs[i][1]=1;log.push({w:'You',t:'Attached: '+st.docs[i][0]+'.'});draw()}
+function sub(){const r=st.state=='rfi';log.push({w:'You',t:r?'Submitted extra documents.':'Submitted KYB form and documents.'});
+ if(r){log.push({w:'Volopay Ops',t:'Sent back to partner. CSM notified.'});st.stage=5}else{log.push({w:'Volopay Ops',t:'Sanity check passed. Sent to partner.'});st.stage=5}
+ st.state='vol';st.docs=[];draw()}
+function nudge(c){log.push({w:'You',t:c?'Requested a call with CSM.':'Nudged CSM.'},{w:'Volopay',t:c?'Arjun will confirm a time within 4 business hours.':'Arjun was alerted and will reply within 4 business hours.'});draw()}
+function rem(i){log.push({w:'Volopay',t:'Reminder sent to '+st.users[i].n+'.'});draw()}
+function fix(i){const u=st.users[i];u.s='done';log.push({w:'You',t:u.n+' re-uploaded passport. KYC passed.'});if(st.users.every(u=>u.s=='done')){st.state='live';log.push({w:'Volopay',t:'All users verified. You are live.'})}else st.state='kyc';draw()}
+$('sc').innerHTML=Object.entries(SCN).map(([k,v])=>`<option value="${k}">${v}</option>`).join('');
+$('sc').onchange=()=>load($('sc').value);$('rg').onchange=()=>load($('sc').value);
+document.querySelectorAll('.tab').forEach(b=>b.onclick=()=>{document.querySelectorAll('.tab').forEach(x=>x.classList.toggle('on',x==b));$('c').hidden=b.dataset.t!='c';$('n').hidden=b.dataset.t!='n'});
+load('you');
+</script></body></html>
